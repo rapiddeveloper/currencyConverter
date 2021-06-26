@@ -7,10 +7,13 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import React from 'react';
+import { useEffect } from 'react';
+import { useState } from 'react';
 //import logo from './logo.svg';
 import './App.css';
 import CurrencyListDialog from './Components/CurrencyListDialog/CurrencyListDialog';
 import ExchangeRateList from './Components/ExchangeRateList/ExchangeRateList';
+import { manager } from './services/ExchangeHostAPIManager';
 
 const useStyles = makeStyles((theme: Theme)=>(
   createStyles({
@@ -55,7 +58,20 @@ const useStyles = makeStyles((theme: Theme)=>(
 function App() {
 
   const classes = useStyles()
+  const [rslt, setRslt] = useState(Array<number>())
+  //const [currencies, setCurrencies] 
+  console.dir(rslt)
 
+  async function loadData() {
+    let c = ["CAD","EUR", "JPY", "GBP", "KRW", "INR", "AUD"]
+    let r = await manager.convert(10, "USD", c)
+    setRslt(r)
+  }
+
+  useEffect(()=>{
+     loadData()
+     
+  }, [])
  
   return (
     <div className="App">
