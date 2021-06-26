@@ -6,42 +6,31 @@ import React from "react";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
+import { Symbol } from '../../services/ExchangeHostAPIManager';
 
 
+interface CurrencyListProps {
+    symbols: Array<Symbol>
+    selectedValue: string
+    onClose: (value: string)=>void
+}
 
-const CurrencyList = ()=>{
+const CurrencyList = (props: CurrencyListProps)=>{
 
-    const currencies = [
-        "NGN Nigerian Naira", 
-        "GBP Great British Pounds",
-        "USD United State Dollar",
-        "NGN Nigerian Naira", 
-        "GBP Great British Pounds",
-        "USD United State Dollar",
-        "NGN Nigerian Naira", 
-        "GBP Great British Pounds",
-        "USD United State Dollar",
-        "NGN Nigerian Naira", 
-        "GBP Great British Pounds",
-        "USD United State Dollar",
-        "NGN Nigerian Naira", 
-        "GBP Great British Pounds",
-        "USD United State Dollar",
-        "NGN Nigerian Naira", 
-        "GBP Great British Pounds",
-        "USD United State Dollar",
-        "NGN Nigerian Naira", 
-        "GBP Great British Pounds",
-        "USD United State Dollar"
-    ]
+    
+    console.log(props.selectedValue)
+    const currencies =  props.symbols
 
-    const handleListItemClick = ()=>{}
+    const handleListItemClick = (value: string)=>{
+       
+        props.onClose(value)
+    }
 
     return (
         <List>
         {currencies.map((currency) => (
-          <ListItem button onClick={() => handleListItemClick()} key={currency}>
-            <ListItemText primary={currency} />
+          <ListItem autoFocus={props.selectedValue === currency.code} button onClick={() => handleListItemClick(currency.code)} key={currency.code}>
+            <ListItemText primary={currency.code + " " + currency.description} />
           </ListItem>
         ))}
         </List>

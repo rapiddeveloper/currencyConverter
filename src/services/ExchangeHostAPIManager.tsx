@@ -4,10 +4,16 @@
 
 import axios from "axios"
 
+export interface Symbol {
+    description: string 
+    code: string
+}
+
 class ExchangeHostAPIManager {
 
     isLoading: boolean = false 
     data: any = null 
+    symbolsData: any = null
     static manager = new ExchangeHostAPIManager()
    
     /**
@@ -31,6 +37,28 @@ class ExchangeHostAPIManager {
         }
        
     }
+
+     /**
+     * loads symbols
+     *  
+     */
+      async loadCurrenciesData() {
+        this.isLoading = true
+
+        try {
+            const rslt = await axios(`https://api.exchangerate.host/symbols`)  
+            
+            if (rslt.data.success) {
+                this.symbolsData = rslt.data.symbols
+              
+             } else {
+                this.symbolsData = null
+             }
+        } catch (error) {
+            this.symbolsData = null
+        }
+       
+    }
     
     /**
      * converts an amount of money from a base currency to a list of target currencies
@@ -50,6 +78,19 @@ class ExchangeHostAPIManager {
             rslt.push(this.data[currency] * amount)  
         }
         
+        return rslt
+    }
+
+    async symbols(): Promise<Array<Symbol>> {
+        let rslt = Array<Symbol>()
+        await this.loadCurrenciesData()
+
+        if (this.symbolsData === null) return rslt
+
+        for (let field in this.symbolsData) {
+            rslt.push(this.symbolsData[field])
+        }
+
         return rslt
     }
 }

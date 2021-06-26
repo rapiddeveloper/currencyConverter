@@ -13,7 +13,7 @@ import { useState } from 'react';
 import './App.css';
 import CurrencyListDialog from './Components/CurrencyListDialog/CurrencyListDialog';
 import ExchangeRateList from './Components/ExchangeRateList/ExchangeRateList';
-import { manager } from './services/ExchangeHostAPIManager';
+import { manager, Symbol } from './services/ExchangeHostAPIManager';
 
 const useStyles = makeStyles((theme: Theme)=>(
   createStyles({
@@ -59,14 +59,29 @@ function App() {
 
   const classes = useStyles()
   const [rslt, setRslt] = useState(Array<number>())
+  const [symbols, setSymbols] = useState(Array<Symbol>())
+  const [open, setOpen] = useState(false)
+  const [selectedValue, setSelectedValue] = useState("USD")
   //const [currencies, setCurrencies] 
-  console.dir(rslt)
+  //console.dir(rslt)
 
   async function loadData() {
     let c = ["CAD","EUR", "JPY", "GBP", "KRW", "INR", "AUD"]
     let r = await manager.convert(10, "USD", c)
+    let data = await manager.symbols()
+    
+    setSymbols(data)
     setRslt(r)
   }
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = (value: string) => {
+    setOpen(false);
+    setSelectedValue(value);
+  };
 
   useEffect(()=>{
      loadData()
@@ -80,8 +95,8 @@ function App() {
           <Typography variant="subtitle1" classes={{subtitle1: classes.subtitle1}}>
             CurrencyBase
           </Typography>
-          <Button variant="outlined" className={`${classes.surfaceColor} ${classes.outlined}`}>
-            USD
+          <Button onClick={handleClickOpen} variant="outlined" className={`${classes.surfaceColor} ${classes.outlined}`}>
+            {selectedValue}
             <KeyboardArrowDownIcon/>
           </Button>
         </Toolbar>
@@ -94,7 +109,7 @@ function App() {
         {/* <div>Add Target Currency Button</div> */}
       </div>
        <ExchangeRateList/>
-       <CurrencyListDialog/>
+       <CurrencyListDialog symbols={symbols} selectedValue={selectedValue} open={open} onClose={handleClose} />
     </div>
   );
 }
