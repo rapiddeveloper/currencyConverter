@@ -1,3 +1,7 @@
+/*
+* A Component that shows a list exchange rates for an amount 
+*/
+
 import React from "react";
 import Divider from '@material-ui/core/Divider';
 import ListItem from '@material-ui/core/ListItem';

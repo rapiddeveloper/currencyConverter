@@ -9,6 +9,7 @@ import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import React from 'react';
 //import logo from './logo.svg';
 import './App.css';
+import CurrencyListDialog from './Components/CurrencyListDialog/CurrencyListDialog';
 import ExchangeRateList from './Components/ExchangeRateList/ExchangeRateList';
 
 const useStyles = makeStyles((theme: Theme)=>(
@@ -77,6 +78,7 @@ function App() {
         {/* <div>Add Target Currency Button</div> */}
       </div>
        <ExchangeRateList/>
+       <CurrencyListDialog/>
     </div>
   );
 }
