@@ -50,6 +50,7 @@ class ExchangeHostAPIManager {
             
             if (rslt.data.success) {
                 this.symbolsData = rslt.data.symbols
+                console.dir(this.symbolsData)
               
              } else {
                 this.symbolsData = null

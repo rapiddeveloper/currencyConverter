@@ -62,11 +62,10 @@ function App() {
   const [symbols, setSymbols] = useState(Array<Symbol>())
   const [open, setOpen] = useState(false)
   const [selectedValue, setSelectedValue] = useState("USD")
-  //const [currencies, setCurrencies] 
-  //console.dir(rslt)
-
+  const [amount, setAmount] =  useState("1")
+  let c = ["CAD","EUR", "JPY", "GBP", "KRW", "INR", "AUD"]
   async function loadData() {
-    let c = ["CAD","EUR", "JPY", "GBP", "KRW", "INR", "AUD"]
+   
     let r = await manager.convert(10, "USD", c)
     let data = await manager.symbols()
     
@@ -82,6 +81,20 @@ function App() {
     setOpen(false);
     setSelectedValue(value);
   };
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>)=>{
+    setAmount(event.target.value)
+  }
+
+  const handleConversion = async ()=>{
+    const value = Number(amount)
+    console.log(value)
+    if (!isNaN(value) && value > -1) {
+       let rslt = await manager.convert(value, selectedValue, c)
+       console.dir(rslt)
+       setRslt(rslt)
+    }
+  }
 
   useEffect(()=>{
      loadData()
@@ -104,8 +117,8 @@ function App() {
       
     
       <div className={classes.ctrlsContainer}>
-         <TextField className={classes.textField} id="outlined-basic"  label="Amount" variant="outlined" />
-         <Button variant="contained">Convert</Button>
+         <TextField value={amount} onChange={handleChange} className={classes.textField} id="outlined-basic"  label="Amount" variant="outlined" />
+         <Button variant="contained" onClick={handleConversion}>Convert</Button>
         {/* <div>Add Target Currency Button</div> */}
       </div>
        <ExchangeRateList/>
