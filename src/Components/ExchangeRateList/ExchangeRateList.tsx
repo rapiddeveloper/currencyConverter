@@ -9,6 +9,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
 import { createStyles, makeStyles, Theme } from "@material-ui/core";
 import List from "@material-ui/core/List";
+import { ExchangeRslt } from "../../services/ExchangeHostAPIManager";
 
 
 const useStyles = makeStyles((theme: Theme)=>(
@@ -20,14 +21,19 @@ const useStyles = makeStyles((theme: Theme)=>(
     })
   ))
 
-const ExchangeRateList = ()=>{
+  interface ExchangeRateListProps {
+      exchangeRslt: Array<ExchangeRslt>
+      selectedTarget: string
+  }
 
-    const exchangeRatelist = [1, 2, 3, 4, 5, 6, 7, 8].map((item, index) =>
+const ExchangeRateList = ({exchangeRslt, selectedTarget}: ExchangeRateListProps)=>{
+    
+    const exchangeRatelist =  exchangeRslt.map((item, index) =>
         <>
             <ListItem button>
-                <ListItemText primary="NAIRA" secondary="NGN" />
+                <ListItemText primary={item.symbol.code} secondary={item.symbol.description} />
                 <Typography variant="h6">
-                    $200.00
+                    {item?.amount}
                 </Typography>
             </ListItem>
             <Divider variant="inset" />

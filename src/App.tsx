@@ -13,7 +13,7 @@ import { useState } from 'react';
 import './App.css';
 import CurrencyListDialog from './Components/CurrencyListDialog/CurrencyListDialog';
 import ExchangeRateList from './Components/ExchangeRateList/ExchangeRateList';
-import { manager, Symbol } from './services/ExchangeHostAPIManager';
+import { ExchangeRslt, manager, Symbol } from './services/ExchangeHostAPIManager';
 
 const useStyles = makeStyles((theme: Theme)=>(
   createStyles({
@@ -58,19 +58,21 @@ const useStyles = makeStyles((theme: Theme)=>(
 function App() {
 
   const classes = useStyles()
-  const [rslt, setRslt] = useState(Array<number>())
+  const [rslt, setRslt] = useState(Array<ExchangeRslt>())
   const [symbols, setSymbols] = useState(Array<Symbol>())
   const [open, setOpen] = useState(false)
   const [selectedValue, setSelectedValue] = useState("USD")
+  const [selectedTarget, setSelectedTarget] = useState("CAD")
   const [amount, setAmount] =  useState("1")
-  let c = ["CAD","EUR", "JPY", "GBP", "KRW", "INR", "AUD"]
+  const [targetCurrencies, setTargetCurrencies] = useState(["CAD","EUR", "JPY", "GBP", "KRW", "INR", "AUD"])
+  
   async function loadData() {
    
-    let r = await manager.convert(10, "USD", c)
-    let data = await manager.symbols()
-    
-    setSymbols(data)
-    setRslt(r)
+    //let rsltVal = await manager.convert(Number(amount), selectedValue, targetCurrencies)
+    let symbolsVal = await manager.symbols()
+    await handleConversion()
+    setSymbols(symbolsVal)
+    //setRslt(rsltVal)
   }
 
   const handleClickOpen = () => {
@@ -90,7 +92,7 @@ function App() {
     const value = Number(amount)
     console.log(value)
     if (!isNaN(value) && value > -1) {
-       let rslt = await manager.convert(value, selectedValue, c)
+       let rslt = await manager.convert(value, selectedValue, targetCurrencies)
        console.dir(rslt)
        setRslt(rslt)
     }
@@ -121,7 +123,7 @@ function App() {
          <Button variant="contained" onClick={handleConversion}>Convert</Button>
         {/* <div>Add Target Currency Button</div> */}
       </div>
-       <ExchangeRateList/>
+       <ExchangeRateList exchangeRslt={rslt} selectedTarget={selectedTarget} />
        <CurrencyListDialog symbols={symbols} selectedValue={selectedValue} open={open} onClose={handleClose} />
     </div>
   );
