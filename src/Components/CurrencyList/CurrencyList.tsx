@@ -18,7 +18,7 @@ interface CurrencyListProps {
 const CurrencyList = (props: CurrencyListProps)=>{
 
     
-    console.log(props.selectedValue)
+     
     const currencies =  props.symbols
 
     const handleListItemClick = (value: string)=>{

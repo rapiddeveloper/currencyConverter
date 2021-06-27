@@ -79,9 +79,19 @@ function App() {
     setOpen(true);
   };
 
-  const handleClose = (value: string) => {
+  const handleClose = async (value: string) => {
+    let oldVal = selectedValue
     setOpen(false);
     setSelectedValue(value);
+    
+   
+    const idx = targetCurrencies.findIndex((currency)=> currency === value) 
+    if (idx > -1) {
+      let temp = targetCurrencies.slice()
+      temp[idx] = oldVal
+      setTargetCurrencies(temp)
+     }  
+    
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>)=>{
@@ -90,7 +100,7 @@ function App() {
 
   const handleConversion = async ()=>{
     const value = Number(amount)
-    console.log(value)
+    //debugger
     if (!isNaN(value) && value > -1) {
        let rslt = await manager.convert(value, selectedValue, targetCurrencies)
        console.dir(rslt)
@@ -102,6 +112,10 @@ function App() {
      loadData()
      
   }, [])
+
+  useEffect(()=>{
+    handleConversion()
+ }, [targetCurrencies, selectedValue])
  
   return (
     <div className="App">

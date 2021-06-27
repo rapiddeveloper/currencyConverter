@@ -30,7 +30,7 @@ const ExchangeRateList = ({exchangeRslt, selectedTarget}: ExchangeRateListProps)
     
     const exchangeRatelist =  exchangeRslt.map((item, index) =>
         <>
-            <ListItem button>
+            <ListItem button key={item.symbol.code}>
                 <ListItemText primary={item.symbol.code} secondary={item.symbol.description} />
                 <Typography variant="h6">
                     {item?.amount}

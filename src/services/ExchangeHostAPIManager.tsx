@@ -30,7 +30,7 @@ class ExchangeHostAPIManager {
         this.isLoading = true
 
         try {
-            const rslt = await axios(`https://api.exchangerate.host/latest?base=${baseCurrency}&symbols=${symbols}&places=2`)  
+            const rslt = await axios(`https://api.exchangerate.host/latest?base=${baseCurrency}&symbols=${symbols}&places=4`)  
             
             if (rslt.data.success) {
                 this.data = rslt.data.rates
