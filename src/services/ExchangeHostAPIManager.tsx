@@ -30,15 +30,17 @@ class ExchangeHostAPIManager {
         this.isLoading = true
 
         try {
-            const rslt = await axios(`https://api.exchangerate.host/latest?base=${baseCurrency}&symbols=${symbols}&places=4`)  
+            const rslt = await axios(`https://api.exchangerate.host/latest?base=${baseCurrency}&symbols=${symbols}&places=2`)  
             
             if (rslt.data.success) {
                 this.data = rslt.data.rates
              } else {
                 this.data = null
              }
+             this.isLoading = false
         } catch (error) {
             this.data = null
+            this.isLoading = false
         }
        
     }
@@ -58,13 +60,14 @@ class ExchangeHostAPIManager {
                 for (let field in rslt.data.symbols) {
                     this.symbolsData.push(rslt.data.symbols[field])
                 }
-                console.dir(this.symbolsData)
-              
+               
              } else {
                 this.symbolsData = []
              }
+             this.isLoading = false
         } catch (error) {
             this.symbolsData = []
+            this.isLoading = false
         }
        
     }
@@ -86,16 +89,14 @@ class ExchangeHostAPIManager {
         if (this.symbolsData.length === 0) return rslt
 
         // get symbol of target
-        //debugger
+       
         for (let currency of targetCurrencies) {
             const idx = this.symbolsData.findIndex((symbol)=> symbol.code === currency)
             // create default exchangRslt instance
             if (idx > -1) {
                  rslt.push({symbol: this.symbolsData[idx], amount: this.data[currency] * amount})
             }
-            //  else {
-            //     rslt.push({symbol: this.symbolsData[idx], amount: undefined})
-            // }
+             
          }
         
         return rslt
@@ -109,6 +110,10 @@ class ExchangeHostAPIManager {
         
         return this.symbolsData.slice()
        
+    }
+
+    setLoading(value: boolean) {
+        this.isLoading = value
     }
 }
 

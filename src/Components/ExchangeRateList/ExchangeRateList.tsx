@@ -24,20 +24,25 @@ const useStyles = makeStyles((theme: Theme)=>(
   interface ExchangeRateListProps {
       exchangeRslt: Array<ExchangeRslt>
       selectedTarget: string
+      onOpen: (currencyType: string, selectedCurrency: string)=>void
   }
 
-const ExchangeRateList = ({exchangeRslt, selectedTarget}: ExchangeRateListProps)=>{
+const ExchangeRateList = ({exchangeRslt, selectedTarget, onOpen}: ExchangeRateListProps)=>{
     
+    const handleListItemClick = (value: string)=>{
+        onOpen("target", value)
+    }
+
     const exchangeRatelist =  exchangeRslt.map((item, index) =>
-        <>
-            <ListItem button key={item.symbol.code}>
+        <div key={item.symbol.code}>
+            <ListItem key={item.symbol.code} button onClick={()=>handleListItemClick(item.symbol.code)}>
                 <ListItemText primary={item.symbol.code} secondary={item.symbol.description} />
                 <Typography variant="h6">
-                    {item?.amount}
+                    {item.amount?.toFixed(2)}
                 </Typography>
             </ListItem>
             <Divider variant="inset" />
-        </>
+        </div>
     )
 
 

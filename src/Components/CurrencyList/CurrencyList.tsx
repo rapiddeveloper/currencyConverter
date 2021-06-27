@@ -16,20 +16,17 @@ interface CurrencyListProps {
 }
 
 const CurrencyList = (props: CurrencyListProps)=>{
-
-    
      
     const currencies =  props.symbols
 
-    const handleListItemClick = (value: string)=>{
-       
+    const handleListItemClick = (value: string)=> {  
         props.onClose(value)
     }
 
     return (
         <List>
         {currencies.map((currency) => (
-          <ListItem autoFocus={props.selectedValue === currency.code} button onClick={() => handleListItemClick(currency.code)} key={currency.code}>
+          <ListItem style={{background: props.selectedValue === currency.code ? "#f7f7f7" : "#fff"}} autoFocus={props.selectedValue === currency.code} button onClick={() => handleListItemClick(currency.code)} key={currency.code}>
             <ListItemText primary={currency.code + " " + currency.description} />
           </ListItem>
         ))}
